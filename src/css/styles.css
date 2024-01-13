@@ -14,6 +14,16 @@
 
   color: #242424;
   background-color: #efe8fb;
+  background-image: linear-gradient(
+      to bottom,
+      rgba(239, 232, 251, 0.652),
+      rgba(239, 232, 251, 0.652)
+    ),
+    url(../img/bg.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -24,7 +34,15 @@
 
 body {
   text-align: center;
-  /* margin-bottom: 100px; */
+  padding: 32px 0;
+}
+
+.gallery-title {
+  color: #634c71;
+  font-size: 24px;
+  font-weight: 400;
+
+  margin-bottom: 32px;
 }
 
 .form {
@@ -32,11 +50,11 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 32px 0;
+  margin-bottom: 32px;
 }
 
 input[name='search'] {
-  width: 272px;
+  max-width: 272px;
   height: 40px;
   padding: 8px 16px;
   border-radius: 4px;
@@ -44,12 +62,18 @@ input[name='search'] {
   outline: transparent;
 
   font-family: inherit;
-  transition: border-color 0.25s ease-in;
+  box-shadow: 0px 4px 4px 0px rgba(102, 80, 117, 0.15);
+  transition: border-color 250ms ease-in;
 }
 
 input[name='search']:hover,
 input[name='search']:focus {
   border-color: #77648a;
+}
+
+input[name='search']::placeholder {
+  color: #c5c5c5;
+  font-size: 14px;
 }
 
 button[type='submit'],
@@ -65,8 +89,8 @@ button[type='submit'],
   border: transparent;
   border-radius: 8px;
   outline: transparent;
-  background: #a7a7dd;
-
+  background: #987fbb;
+  box-shadow: 0px 4px 4px 0px rgba(46, 24, 62, 0.15);
   transition: background-color 250ms ease-out;
 }
 
@@ -78,7 +102,7 @@ button[type='submit']:hover,
 .more-results:hover,
 button[type='submit']:focus,
 .more-results:focus {
-  background-color: #9494dc;
+  background-color: #8e73b3;
 }
 
 .loader.hide {
@@ -107,7 +131,7 @@ button[type='submit']:focus,
   position: absolute;
   left: 0;
   top: 0;
-  background: #9494dc;
+  background: #8e73b3;
   width: 16px;
   height: 16px;
   transform: translate(-50%, 50%);
@@ -148,12 +172,24 @@ button[type='submit']:focus,
   background-color: #ffffff;
 
   transform: scale(1);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.15);
   transition: transform 250ms ease-out;
 }
 
 .gallery-item:hover,
 .gallery-item:focus {
   transform: scale(1.04);
+}
+
+.gallery-image {
+  margin-bottom: 12px;
+}
+
+.gallery-tags {
+  color: #a79da9;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
 }
 
 .gallery-statistic {
@@ -177,4 +213,21 @@ button[type='submit']:focus,
 span {
   line-height: 1.5;
   letter-spacing: 0.04em;
+}
+
+@media screen and (max-width: 403px) {
+  input[name='search'] {
+    margin-bottom: 8px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+
+  .form {
+    display: block;
+    padding: 0 20px;
+  }
 }

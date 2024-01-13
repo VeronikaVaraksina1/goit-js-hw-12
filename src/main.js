@@ -18,62 +18,72 @@ const modal = new SimpleLightbox('.gallery a', {
 
 const per_page = 40;
 let page = 1;
-const totalPages = Math.ceil(500 / per_page);
 let userSearch = '';
 
-form.addEventListener('submit', async event => {
+form.addEventListener('submit', toForm);
+buttonResults.addEventListener('click', toButton);
+
+async function toForm(event) {
   event.preventDefault();
+  buttonResults.classList.add('hide');
+  gallery.innerHTML = '';
+  page = 1;
   userSearch = form.search.value.trim();
 
+  const images = await fetchImages();
+
+  if (images.hits.length === 0) {
+    iziToast.error({
+      position: 'topRight',
+      message:
+        'Sorry, there are no images matching your search query. Please try again!',
+      backgroundColor: '#fff',
+    });
+  }
+  renderImages(images);
+}
+
+async function toButton() {
+  const images = await fetchImages();
+  loader.classList.add('hide');
+
+  if (page >= Math.ceil(images.totalHits / per_page)) {
+    buttonResults.classList.add('hide');
+    iziToast.error({
+      position: 'topRight',
+      message: "We're sorry, but you've reached the end of search results.",
+      backgroundColor: '#fff',
+    });
+  }
+  renderImages(images);
+  moveCard();
+}
+
+async function fetchImages() {
+  loader.classList.remove('hide');
+
+  page += 1;
+
   try {
-    loader.classList.remove('hide');
-    const images = await fetchImages();
-    renderImages(images);
+    const images = await axios.get('https://pixabay.com/api/', {
+      params: {
+        key: '41563330-08ed4e1341b4edecabdae7272',
+        q: userSearch,
+        image_type: 'photo',
+        orientation: 'horizontal',
+        safesearch: true,
+        per_page: per_page,
+        page: page,
+      },
+    });
+
+    return images.data;
   } catch (error) {
     console.log(error.message);
   } finally {
     loader.classList.add('hide');
-    console.log();
+    form.reset();
   }
-
-  buttonResults.addEventListener('click', async () => {
-    try {
-      loader.classList.remove('hide');
-      const images = await fetchImages();
-      renderImages(images);
-
-      if (page > totalPages) {
-        iziToast.error({
-          position: 'topRight',
-          message: "We're sorry, there are no more posts to load",
-        });
-      }
-
-      loader.classList.add('hide');
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      loader.classList.add('hide');
-      console.log();
-    }
-  });
-});
-
-async function fetchImages() {
-  page += 1;
-
-  const images = await axios.get('https://pixabay.com/api/', {
-    params: {
-      key: '41563330-08ed4e1341b4edecabdae7272',
-      q: userSearch,
-      image_type: 'photo',
-      orientation: 'horizontal',
-      safesearch: true,
-      per_page: per_page,
-      page: page,
-    },
-  });
-  return images.data;
 }
 
 async function renderImages(images) {
@@ -94,6 +104,7 @@ async function renderImages(images) {
                     height='200'
                     />
               </a>
+              <p class='gallery-tags'>Tags: ${tags}</p>
               <ul class='gallery-statistic'>
                   <li><p class='statistic'>💗 Likes<span>${likes}</span></p></li>
                   <li><p class='statistic'>👁️ Views<span>${views}</span></p></li>
@@ -108,5 +119,22 @@ async function renderImages(images) {
 
   gallery.insertAdjacentHTML('beforeend', markup);
   modal.refresh();
-  buttonResults.classList.remove('hide');
+
+  if (
+    images.hits.length === 0 ||
+    page >= Math.ceil(images.totalHits / per_page)
+  ) {
+    buttonResults.classList.add('hide');
+  } else {
+    buttonResults.classList.remove('hide');
+  }
+}
+
+function moveCard() {
+  const card = document.querySelector('.gallery-item');
+  const domRect = card.getBoundingClientRect().height;
+  window.scrollBy({
+    top: domRect * 2,
+    behavior: 'smooth',
+  });
 }
