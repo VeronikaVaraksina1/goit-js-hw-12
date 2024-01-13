@@ -44,8 +44,10 @@ async function toForm(event) {
 }
 
 async function toButton() {
+  buttonResults.classList.add('hide');
   const images = await fetchImages();
   loader.classList.add('hide');
+  buttonResults.classList.remove('hide');
 
   if (page >= Math.ceil(images.totalHits / per_page)) {
     buttonResults.classList.add('hide');
