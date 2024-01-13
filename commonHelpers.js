@@ -1,18 +1,19 @@
-import{S as L,i as b,a as v}from"./assets/vendor-bad0427b.js";(function(){const t=document.createElement("link").relList;if(t&&t.supports&&t.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))i(e);new MutationObserver(e=>{for(const s of e)if(s.type==="childList")for(const o of s.addedNodes)o.tagName==="LINK"&&o.rel==="modulepreload"&&i(o)}).observe(document,{childList:!0,subtree:!0});function l(e){const s={};return e.integrity&&(s.integrity=e.integrity),e.referrerpolicy&&(s.referrerPolicy=e.referrerpolicy),e.crossorigin==="use-credentials"?s.credentials="include":e.crossorigin==="anonymous"?s.credentials="omit":s.credentials="same-origin",s}function i(e){if(e.ep)return;e.ep=!0;const s=l(e);fetch(e.href,s)}})();const c=document.querySelector(".form"),w=document.querySelector(".gallery"),r=document.querySelector(".loader"),p=document.querySelector(".more-results"),S=new L(".gallery a",{captionsData:"alt",captionDelay:250}),m=40;let n=1;const $=Math.ceil(500/m);let g="";c.addEventListener("submit",async a=>{a.preventDefault(),g=c.search.value.trim();try{r.classList.remove("hide");const t=await d();u(t)}catch(t){console.log(t.message)}finally{r.classList.add("hide"),console.log()}p.addEventListener("click",async()=>{try{r.classList.remove("hide");const t=await d();u(t),n>$&&b.error({position:"topRight",message:"We're sorry, there are no more posts to load"}),r.classList.add("hide")}catch(t){console.log(t.message)}finally{r.classList.add("hide"),console.log()}})});async function d(){return n+=1,(await v.get("https://pixabay.com/api/",{params:{key:"41563330-08ed4e1341b4edecabdae7272",q:g,image_type:"photo",orientation:"horizontal",safesearch:!0,per_page:m,page:n}})).data}async function u(a){const t=a.hits.reduce((l,{webformatURL:i,largeImageURL:e,tags:s,likes:o,views:f,comments:y,downloads:h})=>l+`<li class='gallery-item'>
+import{S as v,i as p,a as w}from"./assets/vendor-bad0427b.js";(function(){const a=document.createElement("link").relList;if(a&&a.supports&&a.supports("modulepreload"))return;for(const e of document.querySelectorAll('link[rel="modulepreload"]'))n(e);new MutationObserver(e=>{for(const t of e)if(t.type==="childList")for(const r of t.addedNodes)r.tagName==="LINK"&&r.rel==="modulepreload"&&n(r)}).observe(document,{childList:!0,subtree:!0});function l(e){const t={};return e.integrity&&(t.integrity=e.integrity),e.referrerpolicy&&(t.referrerPolicy=e.referrerpolicy),e.crossorigin==="use-credentials"?t.credentials="include":e.crossorigin==="anonymous"?t.credentials="omit":t.credentials="same-origin",t}function n(e){if(e.ep)return;e.ep=!0;const t=l(e);fetch(e.href,t)}})();const d=document.querySelector(".form"),m=document.querySelector(".gallery"),c=document.querySelector(".loader"),o=document.querySelector(".more-results"),S=new v(".gallery a",{captionsData:"alt",captionDelay:250}),u=40;let i=1,f="";d.addEventListener("submit",q);o.addEventListener("click",$);async function q(s){s.preventDefault(),o.classList.add("hide"),m.innerHTML="",i=1,f=d.search.value.trim();const a=await g();a.hits.length===0&&p.error({position:"topRight",message:"Sorry, there are no images matching your search query. Please try again!",backgroundColor:"#fff"}),h(a)}async function $(){const s=await g();c.classList.add("hide"),i>=Math.ceil(s.totalHits/u)&&(o.classList.add("hide"),p.error({position:"topRight",message:"We're sorry, but you've reached the end of search results.",backgroundColor:"#fff"})),h(s),k()}async function g(){c.classList.remove("hide"),i+=1;try{return(await w.get("https://pixabay.com/api/",{params:{key:"41563330-08ed4e1341b4edecabdae7272",q:f,image_type:"photo",orientation:"horizontal",safesearch:!0,per_page:u,page:i}})).data}catch(s){console.log(s.message)}finally{c.classList.add("hide"),d.reset()}}async function h(s){const a=s.hits.reduce((l,{webformatURL:n,largeImageURL:e,tags:t,likes:r,views:y,comments:L,downloads:b})=>l+`<li class='gallery-item'>
               <a class='gallery-link' href='${e}'>
                 <img
                     class='gallery-image'
-                    src='${i}'
-                    alt='${s}'
+                    src='${n}'
+                    alt='${t}'
                     width='360'
                     height='200'
                     />
               </a>
+              <p class='gallery-tags'>Tags: ${t}</p>
               <ul class='gallery-statistic'>
-                  <li><p class='statistic'>💗 Likes<span>${o}</span></p></li>
-                  <li><p class='statistic'>👁️ Views<span>${f}</span></p></li>
-                  <li><p class='statistic'>💬 Comments<span>${y}</span></p></li>
-                  <li><p class='statistic'>💌 Downloads<span>${h}</span></p></li>
+                  <li><p class='statistic'>💗 Likes<span>${r}</span></p></li>
+                  <li><p class='statistic'>👁️ Views<span>${y}</span></p></li>
+                  <li><p class='statistic'>💬 Comments<span>${L}</span></p></li>
+                  <li><p class='statistic'>💌 Downloads<span>${b}</span></p></li>
               </ul>
-            </li>`,"");w.insertAdjacentHTML("beforeend",t),S.refresh(),p.classList.remove("hide")}
+            </li>`,"");m.insertAdjacentHTML("beforeend",a),S.refresh(),s.hits.length===0||i>=Math.ceil(s.totalHits/u)?o.classList.add("hide"):o.classList.remove("hide")}function k(){const a=document.querySelector(".gallery-item").getBoundingClientRect().height;window.scrollBy({top:a*2,behavior:"smooth"})}
 //# sourceMappingURL=commonHelpers.js.map
