@@ -77,7 +77,7 @@ input[name='search']::placeholder {
 }
 
 button[type='submit'],
-.more-results {
+.btn-load-more {
   font-family: inherit;
   color: #fff;
   font-size: 16px;
@@ -94,14 +94,14 @@ button[type='submit'],
   transition: background-color 250ms ease-out;
 }
 
-.more-results {
+.btn-load-more {
   margin-bottom: 32px;
 }
 
 button[type='submit']:hover,
-.more-results:hover,
+.btn-load-more:hover,
 button[type='submit']:focus,
-.more-results:focus {
+.btn-load-more:focus {
   background-color: #8e73b3;
 }
 
@@ -109,7 +109,7 @@ button[type='submit']:focus,
   display: none;
 }
 
-.more-results.hide {
+.btn-load-more.hide {
   display: none;
 }
 

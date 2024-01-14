@@ -9,7 +9,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const form = document.querySelector('.form');
 const gallery = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
-const buttonResults = document.querySelector('.more-results');
+const buttonLoadMore = document.querySelector('.btn-load-more');
 
 const modal = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
@@ -20,13 +20,13 @@ const per_page = 40;
 let page = 1;
 let userSearch = '';
 
-form.addEventListener('submit', toForm);
-buttonResults.addEventListener('click', toButton);
+form.addEventListener('submit', handleSubmit);
+buttonLoadMore.addEventListener('click', handleLoadMore);
 
-async function toForm(event) {
+async function handleSubmit(event) {
   event.preventDefault();
   page = 1;
-  buttonResults.classList.add('hide');
+  buttonLoadMore.classList.add('hide');
   gallery.innerHTML = '';
   userSearch = form.search.value.trim();
 
@@ -37,32 +37,42 @@ async function toForm(event) {
       position: 'topRight',
       message:
         'Sorry, there are no images matching your search query. Please try again!',
-      backgroundColor: '#fff',
+      backgroundColor: '#987fbb',
     });
-  }
-
-  form.reset();
-  renderImages(images);
-  buttonResults.classList.remove('hide');
-}
-
-async function toButton() {
-  page += 1;
-  buttonResults.classList.add('hide');
-  const images = await fetchImages();
-  loader.classList.add('hide');
-  buttonResults.classList.remove('hide');
-
-  if (page >= Math.ceil(images.totalHits / per_page)) {
-    buttonResults.classList.add('hide');
+  } else if (images.hits.length < per_page) {
+    buttonLoadMore.classList.add('hide');
 
     iziToast.error({
       position: 'topRight',
-      message: "We're sorry, but you've reached the end of search results.",
-      backgroundColor: '#813ce0',
+      message:
+        'We&#8217;re sorry, but you&#8217;ve reached the end of search results.',
+      backgroundColor: '#987fbb',
     });
   } else {
-    buttonResults.classList.remove('hide');
+    buttonLoadMore.classList.remove('hide');
+  }
+  form.reset();
+  renderImages(images);
+}
+
+async function handleLoadMore() {
+  page += 1;
+  buttonLoadMore.classList.add('hide');
+  const images = await fetchImages();
+  loader.classList.add('hide');
+  buttonLoadMore.classList.remove('hide');
+
+  if (page >= Math.ceil(images.totalHits / per_page)) {
+    buttonLoadMore.classList.add('hide');
+
+    iziToast.error({
+      position: 'topRight',
+      message:
+        'We&#8217;re sorry, but you&#8217;ve reached the end of search results.',
+      backgroundColor: '#987fbb',
+    });
+  } else {
+    buttonLoadMore.classList.remove('hide');
   }
 
   renderImages(images);
@@ -98,7 +108,7 @@ async function fetchImages() {
   }
 }
 
-async function renderImages(images) {
+function renderImages(images) {
   const markup = images.hits.reduce(
     (
       html,
