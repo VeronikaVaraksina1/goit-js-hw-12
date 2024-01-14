@@ -39,8 +39,9 @@ async function toForm(event) {
         'Sorry, there are no images matching your search query. Please try again!',
       backgroundColor: '#fff',
     });
+  } else {
+    renderImages(images);
   }
-  renderImages(images);
 }
 
 async function toButton() {
