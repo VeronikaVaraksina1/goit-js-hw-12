@@ -25,9 +25,9 @@ buttonResults.addEventListener('click', toButton);
 
 async function toForm(event) {
   event.preventDefault();
+  page = 1;
   buttonResults.classList.add('hide');
   gallery.innerHTML = '';
-  page = 1;
   userSearch = form.search.value.trim();
 
   const images = await fetchImages();
@@ -39,12 +39,15 @@ async function toForm(event) {
         'Sorry, there are no images matching your search query. Please try again!',
       backgroundColor: '#fff',
     });
-  } else {
-    renderImages(images);
   }
+
+  form.reset();
+  renderImages(images);
+  buttonResults.classList.remove('hide');
 }
 
 async function toButton() {
+  page += 1;
   buttonResults.classList.add('hide');
   const images = await fetchImages();
   loader.classList.add('hide');
@@ -52,20 +55,22 @@ async function toButton() {
 
   if (page >= Math.ceil(images.totalHits / per_page)) {
     buttonResults.classList.add('hide');
+
     iziToast.error({
       position: 'topRight',
       message: "We're sorry, but you've reached the end of search results.",
-      backgroundColor: '#fff',
+      backgroundColor: '#813ce0',
     });
+  } else {
+    buttonResults.classList.remove('hide');
   }
+
   renderImages(images);
   moveCard();
 }
 
 async function fetchImages() {
   loader.classList.remove('hide');
-
-  page += 1;
 
   try {
     const images = await axios.get('https://pixabay.com/api/', {
@@ -83,9 +88,13 @@ async function fetchImages() {
     return images.data;
   } catch (error) {
     console.log(error.message);
+    iziToast.error({
+      position: 'topRight',
+      message: 'Sorry, service unavailable.',
+      backgroundColor: '#fff',
+    });
   } finally {
     loader.classList.add('hide');
-    form.reset();
   }
 }
 
@@ -122,15 +131,6 @@ async function renderImages(images) {
 
   gallery.insertAdjacentHTML('beforeend', markup);
   modal.refresh();
-
-  if (
-    images.hits.length === 0 ||
-    page >= Math.ceil(images.totalHits / per_page)
-  ) {
-    buttonResults.classList.add('hide');
-  } else {
-    buttonResults.classList.remove('hide');
-  }
 }
 
 function moveCard() {
