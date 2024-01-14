@@ -54,7 +54,7 @@ body {
 }
 
 input[name='search'] {
-  max-width: 272px;
+  width: 272px;
   height: 40px;
   padding: 8px 16px;
   border-radius: 4px;
