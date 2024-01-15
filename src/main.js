@@ -28,8 +28,8 @@ async function handleSubmit(event) {
   page = 1;
   gallery.innerHTML = '';
   userSearch = form.search.value.trim();
-  buttonLoadMore.classList.add('hide');
 
+  buttonLoadMore.classList.add('hide');
   const images = await fetchImages();
 
   if (images.hits.length === 0) {
@@ -55,15 +55,18 @@ async function handleSubmit(event) {
 
 async function handleLoadMore() {
   page += 1;
+
+  buttonLoadMore.classList.add('hide');
   const images = await fetchImages();
 
   if (page >= Math.ceil(images.totalHits / per_page)) {
-    buttonLoadMore.classList.add('hide');
     iziToast.error({
       position: 'topRight',
       message: "We're sorry, but you've reached the end of search results.",
       backgroundColor: '#987fbb',
     });
+  } else {
+    buttonLoadMore.classList.remove('hide');
   }
 
   renderImages(images);
