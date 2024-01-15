@@ -26,9 +26,9 @@ buttonLoadMore.addEventListener('click', handleLoadMore);
 async function handleSubmit(event) {
   event.preventDefault();
   page = 1;
-  buttonLoadMore.classList.add('hide');
   gallery.innerHTML = '';
   userSearch = form.search.value.trim();
+  buttonLoadMore.classList.add('hide');
 
   const images = await fetchImages();
 
@@ -40,39 +40,30 @@ async function handleSubmit(event) {
       backgroundColor: '#987fbb',
     });
   } else if (images.hits.length < per_page) {
-    buttonLoadMore.classList.add('hide');
-
     iziToast.error({
       position: 'topRight',
-      message:
-        'We&#8217;re sorry, but you&#8217;ve reached the end of search results.',
+      message: "We're sorry, but you've reached the end of search results.",
       backgroundColor: '#987fbb',
     });
   } else {
     buttonLoadMore.classList.remove('hide');
   }
+
   form.reset();
   renderImages(images);
 }
 
 async function handleLoadMore() {
   page += 1;
-  buttonLoadMore.classList.add('hide');
   const images = await fetchImages();
-  loader.classList.add('hide');
-  buttonLoadMore.classList.remove('hide');
 
   if (page >= Math.ceil(images.totalHits / per_page)) {
     buttonLoadMore.classList.add('hide');
-
     iziToast.error({
       position: 'topRight',
-      message:
-        'We&#8217;re sorry, but you&#8217;ve reached the end of search results.',
+      message: "We're sorry, but you've reached the end of search results.",
       backgroundColor: '#987fbb',
     });
-  } else {
-    buttonLoadMore.classList.remove('hide');
   }
 
   renderImages(images);
@@ -81,7 +72,6 @@ async function handleLoadMore() {
 
 async function fetchImages() {
   loader.classList.remove('hide');
-
   try {
     const images = await axios.get('https://pixabay.com/api/', {
       params: {
@@ -94,14 +84,13 @@ async function fetchImages() {
         page: page,
       },
     });
-
     return images.data;
   } catch (error) {
     console.log(error.message);
     iziToast.error({
       position: 'topRight',
       message: 'Sorry, service unavailable.',
-      backgroundColor: '#fff',
+      backgroundColor: '#987fbb',
     });
   } finally {
     loader.classList.add('hide');
@@ -146,6 +135,7 @@ function renderImages(images) {
 function moveCard() {
   const card = document.querySelector('.gallery-item');
   const domRect = card.getBoundingClientRect().height;
+
   window.scrollBy({
     top: domRect * 2,
     behavior: 'smooth',
